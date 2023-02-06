@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    int priority;
+};
+
+struct node * queue;
+int size = 0;
+int count = 0;
+
+int main()
+{
+    printf("Enter Size of Queue : ");
+    scanf("%d",&size);
+
+    queue = (struct node *)malloc(size*sizeof(struct node));
+    int choice = 1;
+
+    while (choice!=4){
+        printf("\nTo Insert - 1\nTo Delete - 2\nTo Display - 3\nExit - 4\n\nCHOICE : ");
+        scanf("%d",&choice);
+        switch(choice){
+        case 1 : insert(); break;
+        case 2 : deleter(); break;
+        case 3 : display(); break;
+        case 4 : exit(0);
+        }
+    }
+return 0;
+}
+
+void insert(){
+    if (size == count){         //QUEUE IS FULL
+        printf("\nQueue FULL... Exiting");
+        return;
+    }
+
+    count++;
+    printf("Enter Data to Insert : ");
+    scanf("%d",&queue[count - 1].data);
+    printf("Enter Priority of the Data : ");
+    scanf("%d",&queue[count - 1].priority);
+
+    if (count == 1){    //NO NEED TO SORT THROUGH WHEN NO OTHER ELEMENTS TO COMPARE WITH
+        return;
+    }
+
+    int position_of_node = count - 1;   //
+    while(queue[position_of_node].priority < queue[position_of_node - 1].priority && position_of_node != 0){    //TILL THE NODE IS NOT AT THE PERFECT PRIORITY KEEP GOING OR TILL AT INDEX 0
+        swap_in_queue(position_of_node,position_of_node - 1);
+        position_of_node--;
+    }
+}
+
+void deleter(){
+    printf("Dequeued Element : %d",queue[0]);
+    count--;
+    for (int i = 0; i!=count;i++){
+        swap_in_queue(i,i+1);
+    }
+}
+
+void swap_in_queue(int a, int b){
+    struct node temp = queue[a];
+    queue[a] = queue[b];
+    queue[b] = temp;
+}
+
+void display(){
+    printf("\nThe Queue is : \n");
+    for (int i = 0; i != count; i++){
+        printf("| %d |",queue[i]);
+    }
+}

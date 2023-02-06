@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+//left child = 2i+1
+//right child = 2i+2
+//parent = ((i-1)/2)
+
+int array_empty = 1;
+int * array = NULL;
+int size = 0;
+int current_index = 0;
+
+int main()
+{
+    printf("Enter Number of Nodes in Tree : ");
+    scanf("%d",&size);
+    array = (int *)malloc(size*sizeof(int));
+
+    printf("Enter 1st Node : ");
+    scanf("%d",&array[0]);
+    int input_count = 1;
+
+    while(1){
+        int left_child = 2*current_index + 1;
+        int right_child= 2*current_index + 2;
+        printf("Enter Left Child of Index %d : ",current_index);
+        scanf("%d",&array[left_child]);
+        input_count++;
+        if (input_count == size)
+            break;
+        printf("Enter Right Child of Index %d : ",current_index);
+        scanf("%d",&array[right_child]);
+        input_count++;
+        if (input_count == size)
+            break;
+        current_index++;
+    }
+    info_of_index();
+    printf("PreORDER Traversal of CBT is : ");
+    preorder(0);
+    return 0;
+}
+
+void info_of_index(){
+    int index = 0;
+    printf("Enter Index to find Information of : ");
+    scanf("%d",&index);
+
+    if (index == 0){
+        printf("Left Child of Root : %d\n",array[2*index + 1]);
+        printf("Right Child of Root : %d\n",array[2*index + 2]);
+        return;
+    }
+    printf("Parent of %d : %d\n",array[index],array[(index - 1)/2]);
+    printf("Left Child of %d : %d\n",array[index],array[2*index + 1]);
+    printf("Right Child of %d : %d\n",array[index],array[2*index + 2]);
+}
+
+void leaf_nodes(){
+    for (int i = 0; i < size; i++){
+        if (2*i + 1 > size){
+            printf("\nIndex %d is a Leaf node\n",i);
+        }
+    }
+}
+
+void preorder(int index){
+    printf("%d",array[index]);
+    if (2*index + 1 < size){
+        preorder(2*index + 1);
+    }
+    if (2*index + 2 < size){
+        printf("%d",array[2*index + 2]);
+    }
+}

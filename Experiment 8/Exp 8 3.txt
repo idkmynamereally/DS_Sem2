@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int * hash_array;
+int count = 0;
+int size;
+
+int hash_function(int hash_key);
+int add_till_death(int input);
+
+int main()
+{
+    printf("\t\t\t\t\tDSA Experiment - 8.3");
+    size = 10;
+    hash_array = (int *)malloc(size*sizeof(int));
+
+    for(int i = 0;i < size;i++){
+        hash_array[i] = NULL;
+    }
+
+    int choice = 0;
+    while (1 == 1){
+        printf("\n1 - To Enter Sap ID\n2 - To Delete SAP_ID\n3 - Find Hash Key\n4 - Quit\nChoice : ");
+        scanf("%d",&choice);
+        switch(choice){
+            case 1 : insert_key_to_table();break;
+            case 2 : delete_key();break;
+            case 3 : search_key();break;
+            case 4 : exit(0);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
+int hash_function(int hash_key){    //RETURN THE ARRAY INDEX FOR THE GIVEN KEY - IN THIS CASE SAP ID
+    hash_key = hash_key - 5000000;
+    return add_till_death(hash_key);
+}
+
+void insert_key_to_table(){       //FRONT END PRETTY FUNCTION
+    int data = 0;
+    printf("Enter SAP_ID To insert : ");
+    scanf("%d",&data);
+    insert_to_array_hash_table(data,hash_function(data));
+}
+
+int insert_to_array_hash_table(int data,int key){   //TECHNICAL FUNCTION BACKEND
+    if (hash_array[key] == NULL){
+        hash_array[key] = data;
+        return;
+    }
+    //LINEAR PROBING
+    int i = 0;
+    for(i = (key + 1) % size; hash_array[i]!=NULL && i!=key ; i++,i = i % size);          //KEEP GOING TO INDEX THAT IS NULL EVEN AFTER END OF ARRAY
+    if (i == key){
+        printf("\nNo Available Space Array is FULL...");
+        return;
+    }
+    hash_array[i] = data;
+}
+
+int add_till_death(int input){
+    int total = 0;
+    while (input != 0){
+        total = total + input % 10;
+        input = input/10;
+    }
+    if (total > 9)
+        total = add_till_death(total);
+    return total;
+}
+
+void search_key(){          //SEARCHING IN ARRAY OF LINKED LIST
+    int data;
+    int key_index;
+    printf("Enter Entry to Find : ");
+    scanf("%d", &data);
+    key_index = hash_function(data);
+    if (hash_array[key_index] == data){     //TO MAKE THE FOR LOOP CONDITION USEABLE
+        printf("\n%d is Present at Index : %d",data,key_index);
+        return;
+    }
+    int i = key_index+1;
+    for (i ; hash_array[i] != data && i!=key_index ; i++,i = i % size);
+    if (i == key_index){
+        printf("\nKey not in Table");
+        return;
+    }
+    printf("\n%d is Present at Index : %d",data,i);
+}
+
+void delete_key(){
+    int data;
+    printf("\nEnter Key to Delete : ");
+    scanf("%d",&data);
+    int key_index = hash_function(data);
+    int i = key_index + 1;
+    if (hash_array[key_index] == data){
+        printf("\nDeleted Key : %d",hash_array[key_index]);
+        hash_array[key_index] = NULL;
+        return;
+    }
+
+    for (i ; hash_array[i] != data && i!= key_index; i++,i = i % size);
+    if (i == key_index){
+        printf("\nKey not in Table\n");
+        return;
+    }
+    printf("\nDeleted Key : %d",hash_array[i]);
+    hash_array[i] = NULL;
+}

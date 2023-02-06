@@ -1,0 +1,148 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node * next;
+};
+
+struct node * front;
+struct node * rear;
+struct node * new_node;
+struct node * ptr;
+
+void insert_at_front();
+void insert_at_rear();
+void delete_at_front();
+void delte_at_rear();
+
+int main()
+{
+    printf("For Input Restricted Deque - 1\nFor Output Restricted Deque - 2\n");
+    int type = 0;
+    scanf("%d",&type);
+    switch (type){
+        case 1 : printf("\t\t\t\tINPUT RESTRICTED QUEUE\n\n");InpR_Deque();break;
+        case 2 : printf("\t\t\t\tOUTPUT RESTRICTED QUEUE\n\n");OutR_Deque();break;
+    }
+
+    return 0;
+}
+
+void InpR_Deque(){
+    while(1==1){
+        int choice = 0;
+        printf("\n1 - Input At Front\n2 - Delete at Front\n3 - Delete at Rear\n4 - Display\n5 - Quit\n\nChoice : ");
+        scanf("%d",&choice);
+        printf("\n");
+        switch (choice){
+            case 1 : insert_at_front();break;
+            case 2 : delete_at_front();break;
+            case 3 : delete_at_rear();break;
+            case 4 : display_queue();break;
+            case 5 : exit(0);
+        }
+    }
+}
+
+void OutR_Deque(){
+    while(1==1){
+        int choice = 0;
+        printf("1 - Input At Front\n2 - Input at rear\n3 - Delete at Rear\n\n4 - Display\n5 - Quit\nChoice : ");
+        scanf("%d",&choice);
+        switch (choice){
+            case 1 : insert_at_front();break;
+            case 2 : insert_at_rear();break;
+            case 3 : delete_at_rear();break;
+            case 4 : display_queue();break;
+            case 5 : exit(0);
+        }
+    }
+}
+
+void info(){
+printf("FRONT = %d REAR = %d FRONT->NEXT = %d REAR->NEXT = %d",front,rear,front->next,rear->next);
+}
+
+void insert_at_front(){
+    new_node = (struct node *)malloc(sizeof(struct node));
+    printf("Enter Data To Insert at Front : ");
+    scanf("%d",&new_node->data);
+    if (front == NULL){
+        new_node->next = NULL;
+        front = new_node;
+        rear = new_node;
+        display_queue();
+        return;
+    }
+    new_node->next = front;
+    front = new_node;
+    display_queue();
+}
+
+void insert_at_rear(){
+    new_node = (struct node *)malloc(sizeof(struct node));
+    printf("Enter Data To Insert at Rear : ");
+    scanf("%d",&new_node->data);
+    new_node->next = NULL;
+    if (front == NULL){
+        front = rear = new_node;
+        display_queue();
+        return;
+    }
+    rear->next = new_node;
+    rear = new_node;
+    display_queue();
+}
+
+void delete_at_front(){
+    if (front == NULL){
+        printf("\nQUEUE IS EMPTY...");
+        return;
+    }
+    if (front == rear){
+        printf("Deleted Element at front : %d\n",front->data);
+        free(front);
+        front = rear = NULL;
+        display_queue();
+        return;
+    }
+    printf("Deleted Element at front : %d\n",front->data);
+    struct node * temp = front;
+    front = front->next;
+    free(temp);
+    display_queue();
+}
+
+void delete_at_rear(){
+    if (front == NULL){
+        printf("\nQUEUE IS EMPTY...");
+        return;
+    }
+    if (front == rear){
+        printf("Deleted Element at rear : %d\n",front->data);
+        free(front);
+        front = rear = NULL;
+        display_queue();
+        return;
+    }
+    printf("Deleted Element at rear : %d\n",front->data);
+    for (ptr = front; ptr->next!=rear; ptr = ptr->next);
+    struct node * temp = rear;
+    rear = ptr;
+    rear->next = NULL;
+    free(temp);
+    display_queue();
+}
+
+void display_queue(){
+    printf("\n");
+    if (front == NULL){
+        printf("QUEUE IS EMPTY...\n");
+        return;
+    }
+    for(ptr = front; ptr!=rear->next;ptr=ptr->next){
+        printf("| %d |",ptr->data);
+    }
+    printf("\n");
+}

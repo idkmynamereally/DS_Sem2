@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int Sap_id;
+    struct node * next;
+};
+
+struct node * ptr;
+struct node * new_sap;
+
+struct node * array_of_linked_list [10];
+
+int sap_hash_function(int sap_id);
+int add_of_all_digits(int input);
+
+
+int main(){
+
+for (int i = 0; i <  10; i++){          //INITIALIZE ALL ARRAY POINTERS TO NULL
+    array_of_linked_list[i] = NULL;
+}
+
+    int repeat = 1;
+    while(repeat == 1){
+        printf("1 - Add a Sap to The Hash Table\n2 - Print The Hash Table\n3 - Quit\nChoice : ");
+        scanf("%d",&repeat);
+        switch(repeat){
+            case 1 : take_sap_and_place_position();
+                     break;
+            case 2 : print_hash_table();
+                     break;
+            case 3 : return 0;
+        }
+        repeat = 1;
+    }
+
+
+return 0;
+}
+
+//SAP TAKER
+int take_sap_and_place_position(){
+    int input_sap_id = 0;
+    int hashed_index = 0;
+    printf("Enter Your SAP ID : ");
+    scanf("%d",&input_sap_id);
+    hashed_index = sap_hash_function(input_sap_id);
+    place_in_array(hashed_index,input_sap_id);
+}
+
+void print_hash_table(){
+    for (int hash_key = 0;hash_key < 10; hash_key++){
+        ptr = array_of_linked_list[hash_key];
+        printf("HASH KEY : %d",hash_key);
+        for (ptr; ptr!=NULL; ptr = ptr->next)
+            printf(" SAP : %d ",ptr->Sap_id);
+        printf("\n");
+    }
+}
+
+void place_in_array(int hash_key, int sap_id){
+    if (array_of_linked_list[hash_key] != NULL){    //INSERT AT START IF NOT NULL
+        new_sap = (struct node *)malloc(sizeof(struct node));
+        new_sap->next = array_of_linked_list[hash_key];
+        new_sap->Sap_id = sap_id;
+        array_of_linked_list[hash_key] = new_sap;
+        return;
+    }
+
+    new_sap = (struct node *)malloc(sizeof(struct node));
+    new_sap->next = NULL;
+    new_sap->Sap_id = sap_id;
+    array_of_linked_list[hash_key] = new_sap;
+}
+
+//THE HASH function
+int sap_hash_function(int sap_id){
+
+    int hashed_index = 0;
+    int temp_sap = sap_id;
+    temp_sap = sap_id - 5000000;
+    hashed_index = add_of_all_digits(temp_sap);
+    while (hashed_index > 9){
+        hashed_index = add_of_all_digits(hashed_index);
+    }
+    return hashed_index;
+}
+
+int add_of_all_digits(int input){
+    int added = 0;
+    while(input != 0){
+        added = added + input%10;
+        input = input/10;
+    }
+    return added;
+}

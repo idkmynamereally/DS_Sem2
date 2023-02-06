@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node * next;
+};
+
+struct node * head = NULL;
+struct node * new_node = NULL;
+struct node * ptr = NULL;
+
+int main()
+{
+    while (1 == 1){
+        int choice = 0;
+        printf("1 - Insert Nodes\n2 - Bubble Sort\n3 - Display Linked List\n4 - Quit\nChoice : ");
+        scanf("%d",&choice);
+        switch(choice){
+            case 1 : insert_new_node();break;
+            case 2 : bubble_sort();break;
+            case 3 : print_list();break;
+            case 4 : exit(0);
+        }
+    }
+    return 0;
+}
+
+void bubble_sort(){
+    struct node * ptr2;
+    int flag = 1;
+    while (flag == 1){
+        flag = 0;
+        for (ptr = head; ptr->next!=NULL;ptr = ptr->next){
+            if(ptr->data > ptr->next->data){
+                swap_nodes(ptr,ptr->next);
+                flag = 1;
+            }
+        }
+    }
+}
+
+void swap_nodes(struct node * node1,struct node * node2){
+    int temp = node1->data;
+    node1->data = node2->data;
+    node2->data = temp;
+}
+
+void insert_new_node(){
+    int data;
+    printf("Enter Data To Insert : ");
+    scanf("%d",&data);
+    new_node = (struct node *)malloc(sizeof(struct node));
+    new_node->data = data;
+    if(head == NULL){
+        head = new_node;
+        head->next = NULL;
+        return;
+    }
+    for (ptr = head; ptr->next!=NULL; ptr = ptr->next);
+    ptr->next = new_node;
+    new_node->next = NULL;
+}
+
+void print_list(){
+    printf("\n");
+    for (ptr = head; ptr !=NULL; ptr = ptr->next){
+        printf("| %d |",ptr->data);
+    }
+    printf("\n");
+}
